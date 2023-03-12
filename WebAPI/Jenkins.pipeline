@@ -1,0 +1,39 @@
+pipeline {
+    
+  agent any
+  
+  stages {
+      
+        stage('Git Clone') {
+            steps {
+                git branch: 'main', credentialsId: '5f1ec138-821b-4b39-9b65-5b47b80ab102', url: 'https://github.com/mayankprajapati1011/AspDotNetCoreWebAPI.git'
+            }
+        }
+      
+        stage('Build') {  
+            steps {  
+              bat 'dotnet build %WORKSPACE%\\WebAPI\\WebAPI.sln --configuration Release' 
+            }  
+        }
+        
+        stage('Create Zip File') {  
+            steps {
+              bat  'dotnet build %WORKSPACE%\\WebAPI\\WebAPI.sln /nologo /p:PublishProfile=Release /p:PackageLocation="%WORKSPACE%\\WebAPI\\Publish\\Package" /p:OutDir="%WORKSPACE%\\WebAPI\\Publish\\Out" /p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /maxcpucount:1 /p:platform="Any CPU" /p:configuration="Release" /p:DesktopBuildPackageLocation="%WORKSPACE%\\WebAPI\\Publish\\Package\\package.zip"'
+            }  
+        }
+        
+        stage('Deploy') {
+            steps {
+             bat 'net stop "w3svc"'
+             bat '"C:\\Program Files\\IIS\\Microsoft Web Deploy V3\\msdeploy.exe" -verb:sync -source:package="%WORKSPACE%\\WebAPI\\Publish\\Package\\WebAPI.zip" -dest:auto -setParam:name="IIS Web Application Name",value="WebAPI_1001"'
+             bat 'net start "w3svc"'
+            }
+        }
+        
+        stage('Delete Directory') {  
+            steps {
+              deleteDir()
+            }  
+        }
+    }
+}

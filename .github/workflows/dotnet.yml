@@ -1,12 +1,19 @@
+# This workflow will build a .NET project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+
 name: .NET
+
 on:
   push:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
+
 jobs:
   build:
+
     runs-on: ubuntu-latest
+
     steps:
     - uses: actions/checkout@v3
     - name: Setup .NET
@@ -17,6 +24,5 @@ jobs:
       run: dotnet restore ./WebAPI/WebAPI.csproj
     - name: Build 
       run: dotnet build ./WebAPI/WebAPI.csproj --no-restore
-    - name: Build and analyze
     - name: Run SonarScanner
       run: dotnet sonarscanner begin /k:"mayankprajapati1011_AspDotNetCoreWebAPI" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" && dotnet build ./WebAPI/WebAPI.csproj --no-incremental && dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"

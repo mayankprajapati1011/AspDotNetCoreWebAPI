@@ -19,9 +19,4 @@ jobs:
       run: dotnet build ./WebAPI/WebAPI.csproj --no-restore
     - name: Build and analyze
     - name: Run SonarScanner
-      run: dotnet sonarscanner begin 
-          /k:"mayankprajapati1011_AspDotNetCoreWebAPI" 
-          /d:sonar.login="${{ secrets.SONAR_TOKEN }}" && 
-          dotnet build ./WebAPI/WebAPI.csproj --no-incremental && 
-          dotnet sonarscanner end 
-          /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+      run: dotnet sonarscanner begin /k:"mayankprajapati1011_AspDotNetCoreWebAPI" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" && dotnet build ./WebAPI/WebAPI.csproj --no-incremental && dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"

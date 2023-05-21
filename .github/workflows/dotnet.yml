@@ -28,7 +28,7 @@ jobs:
       run: dotnet sonarscanner begin /k:"mayankprajapati1011_AspDotNetCoreWebAPI" /d:sonar.login="$SONAR_TOKEN" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.organization="mayankprajapati1011" /d:sonar.projectBaseDir="."
       
     - name: Build and analyze
-      run: dotnet build ./WebAPI/WebAPI.csproj --no-restore
+      run: dotnet build 
           
     - name: End SonarScanner
       run: dotnet sonarscanner end /d:sonar.login="$SONAR_TOKEN"
